@@ -1,16 +1,15 @@
 import React from 'react';
-import SongList from './SongList';
+import Login from "./Login";
+
 
 const App = () => {
+
     return (
-        <div className="ui container grid">
-            <div className="ui row">
-                <div className="column eight wide">
-                    <SongList />
-                </div>
-            </div>
+        <div>
+            <Login />
         </div>
     );
+
 };
 
 export default App;

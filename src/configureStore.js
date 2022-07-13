@@ -1,18 +1,13 @@
-import { applyMiddleware, compose, createStore } from 'redux'
-import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunkMiddleware from "redux-thunk";
+import rootReducer from "./reducers";
 
-import monitorReducersEnhancer from './enhancers/monitorReducers'
-import loggerMiddleware from './middleware/logger'
-import rootReducer from './reducers'
 
-export default function configureStore(preloadedState) {
-    const middlewares = [loggerMiddleware, thunkMiddleware]
-    const middlewareEnhancer = applyMiddleware(...middlewares)
+const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware))
 
-    const enhancers = [middlewareEnhancer, monitorReducersEnhancer]
-    const composedEnhancers = compose(...enhancers)
-
-    const store = createStore(rootReducer, preloadedState, composedEnhancers)
-
-    return store
-}
+const store = createStore(
+    rootReducer,
+    composedEnhancer
+);
+export default store;
