@@ -4,6 +4,7 @@ import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 import { login } from '../actions/auth';
+import { useNavigate } from 'react-router-dom';
 
 const required = (value) => {
   if (!value) {
@@ -17,14 +18,15 @@ const required = (value) => {
 const Login = (props) => {
   const form = useRef();
   const checkBtn = useRef();
-  const [username, setUsername] = useState('');
+  const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { message } = useSelector((state) => state.message);
   const dispatch = useDispatch();
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const navigate = useNavigate();
+  const onChangeemail = (e) => {
+    const email = e.target.value;
+    setemail(email);
   };
   const onChangePassword = (e) => {
     const password = e.target.value;
@@ -35,14 +37,14 @@ const Login = (props) => {
     setLoading(true);
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(login(username, password, setLoading));
+      dispatch(login(email, password, setLoading));
     } else {
       setLoading(false);
     }
   };
+
   if (JSON.parse(localStorage.getItem('user'))) {
-    // todo: redirect to a specific page,
-    return <div>Already logged in</div>;
+    navigate('/profile');
   }
   return (
     <div className="d-flex justify-content-md-center align-items-center vh-100 ">
@@ -51,10 +53,10 @@ const Login = (props) => {
           <h3>Login with e-mail</h3>
         </div>
 
-        <Form onSubmit={handleLogin} ref={form}>
+        <Form onSubmit={handleLogin} ref={form} autocomplete="off">
           <div className="form-group">
-            <label htmlFor="username">Email</label>
-            <Input type="text" className="form-control" name="username" value={username} onChange={onChangeUsername} validations={[required]} />
+            <label htmlFor="email">Email</label>
+            <Input type="text" className="form-control" name="email" value={email} onChange={onChangeemail} validations={[required]} />
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>

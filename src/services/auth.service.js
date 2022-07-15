@@ -1,14 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://restapi.adequateshop.com/api/';
-const register = (name, email, password) => {
-  // todo: fix this part to work the same way as login
+const API_URL = 'https://cors-anywhere.herokuapp.com/http://restapi.adequateshop.com/api/';
 
-  return axios.post(API_URL + 'authaccount/registration', {
-    name,
-    email,
-    password,
-  });
-};
 const login = (email, password) => {
   const loginPost = async () => {
     const response = await axios.post(API_URL + 'authaccount/login', {
@@ -19,6 +11,18 @@ const login = (email, password) => {
     return response.data;
   };
   return loginPost();
+};
+const register = (name, email, password) => {
+  const registerPost = async () => {
+    const response = await axios.post(API_URL + 'authaccount/registration', {
+      name,
+      email,
+      password,
+    });
+
+    return response.data;
+  };
+  return registerPost();
 };
 const logout = () => {
   localStorage.removeItem('user');
