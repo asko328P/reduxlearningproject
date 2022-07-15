@@ -1,24 +1,47 @@
 import axios from 'axios';
-const API_URL = 'http://restapi.adequateshop.com/api/';
-const register = (name, email, password) => {
-  // todo: fix this part to work the same way as login
+const API_URL = 'https://dev-api.mioo.cc/account/';
 
-  return axios.post(API_URL + 'authaccount/registration', {
-    name,
-    email,
-    password,
-  });
-};
 const login = (email, password) => {
   const loginPost = async () => {
-    const response = await axios.post(API_URL + 'authaccount/login', {
-      email,
-      password,
-    });
-
+    const response = await axios.post(
+      `${API_URL}login`,
+      {
+        email,
+        password,
+      },
+      {
+        validateStatus: (status) => {
+          return status < 500;
+        },
+      },
+    );
     return response.data;
   };
   return loginPost();
+};
+const register = (first_name, last_name, email, phone_number, password) => {
+  const registerPost = async () => {
+    const response = await axios.post(
+      `${API_URL}register`,
+      {
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        password,
+        country: 'se',
+        language: 'sv',
+      },
+      {
+        validateStatus: (status) => {
+          return status < 500;
+        },
+      },
+    );
+
+    return response.data;
+  };
+  return registerPost();
 };
 const logout = () => {
   localStorage.removeItem('user');

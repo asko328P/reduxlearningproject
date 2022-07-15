@@ -1,68 +1,65 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE } from './types';
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, SET_MESSAGE, REGISTER_SUCCESS, REGISTER_FAIL } from './types';
 import AuthService from '../services/auth.service';
-export const register = (username, email, password) => {
+
+export const register = (firstName, lastName, email, password, phoneNumber, setLoading) => {
   return async (dispatch) => {
     try {
-    } catch (error) {}
+      const response = await AuthService.register(firstName, lastName, email, phoneNumber, password);
+      if (response && response.success === true && response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        dispatch({
+          type: REGISTER_SUCCESS,
+        });
+        dispatch({
+          type: SET_MESSAGE,
+          payload: 'Successfully registered',
+        });
+      }
+      if (response && response.success === false && response.error.message) {
+        dispatch({
+          type: REGISTER_FAIL,
+        });
+        dispatch({
+          type: SET_MESSAGE,
+          payload: 'User with this email already exists',
+        });
+      }
+    } catch (error) {
+      const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+      dispatch({
+        type: REGISTER_FAIL,
+      });
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+    }
+    setLoading(false);
   };
-
-  /* todo: convert this piece to async/await, also do not forget to import REGISTER_SUCCESS and REGISTER_FAIL
-    return AuthService.register(username, email, password).then(
-        (response) => {
-            dispatch({
-                type: REGISTER_SUCCESS,
-            });
-            dispatch({
-                type: SET_MESSAGE,
-                payload: response.data.message,
-            });
-            return Promise.resolve();
-        },
-        (error) => {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
-            dispatch({
-                type: REGISTER_FAIL,
-            });
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-            return Promise.reject();
-        }
-    );
-
-     */
 };
 
 export const login = (username, password, setLoading) => {
   return async (dispatch) => {
     try {
       const response = await AuthService.login(username, password);
-      if (response.code === 0) {
-        console.log('Succesfully logged in');
-        localStorage.setItem('user', JSON.stringify(response));
+      if (response && response.success === true && response.data) {
+        localStorage.setItem('user', JSON.stringify(response.data));
         dispatch({
           type: LOGIN_SUCCESS,
           payload: { user: response },
         });
         dispatch({
           type: SET_MESSAGE,
-          payload: response.message,
+          payload: 'Successfully logged in',
         });
       }
-      if (response.code === 1) {
-        console.log('invalid username or password');
+      if (response && response.success === false) {
         dispatch({
           type: LOGIN_FAIL,
         });
         dispatch({
           type: SET_MESSAGE,
-          payload: response.message,
+          payload: 'Wrong username or password',
         });
       }
     } catch (error) {
@@ -82,5 +79,9 @@ export const logout = () => (dispatch) => {
   AuthService.logout();
   dispatch({
     type: LOGOUT,
+  });
+  dispatch({
+    type: SET_MESSAGE,
+    payload: 'Successfully logged out',
   });
 };
