@@ -1,7 +1,26 @@
 import React from 'react';
+import { logout } from '../actions/auth';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  return <div>Profile page</div>;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    navigate('/');
+  };
+  return (
+    <div>
+      Profile page
+      <div className="d-flex justify-content-center p-3">
+        <button className="btn shadow rounded-pill" onClick={handleLogout}>
+          Log out:
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default Profile;
