@@ -124,7 +124,6 @@ const Register = () => {
   });
   useEffect(() => {
     return () => {
-      console.log('clearing message');
       dispatch(clearMessage());
     };
   }, [dispatch]);

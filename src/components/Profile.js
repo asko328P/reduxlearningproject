@@ -11,12 +11,21 @@ const Profile = () => {
     dispatch(logout());
     navigate('/');
   };
+  const navigateToBicycles = (e) => {
+    e.preventDefault();
+    navigate('/bicycles');
+  };
   return (
     <div>
       Profile page
       <div className="d-flex justify-content-center p-3">
         <button className="btn shadow rounded-pill" onClick={handleLogout}>
           Log out:
+        </button>
+      </div>
+      <div className="d-flex justify-content-center p-3">
+        <button className="btn shadow rounded-pill" onClick={navigateToBicycles}>
+          View your bicycles:
         </button>
       </div>
     </div>
