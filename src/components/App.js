@@ -5,6 +5,7 @@ import Profile from './Profile';
 import Register from './Register';
 import MustBeLoggedInRoute from './MustBeLoggedInRoute';
 import MustNotBeLoggedInRoute from './MustNotBeLoggedInRoute';
+import Bicycles from './Bicycles';
 
 const App = () => {
   return (
@@ -31,6 +32,14 @@ const App = () => {
           element={
             <MustBeLoggedInRoute>
               <Profile />
+            </MustBeLoggedInRoute>
+          }
+        />
+        <Route
+          path="/bicycles"
+          element={
+            <MustBeLoggedInRoute>
+              <Bicycles />
             </MustBeLoggedInRoute>
           }
         />
